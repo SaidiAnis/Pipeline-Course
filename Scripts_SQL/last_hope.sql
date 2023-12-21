@@ -23,10 +23,10 @@ def fetch_search_results(search_term):
 
 
 
-       # Liste pour stocker les résultats de DBMS_OUTPUT
+       # Liste pour stocker les rï¿½sultats de DBMS_OUTPUT
     results = []
 
-    # Récupérer et ajouter les lignes de DBMS_OUTPUT à la liste
+    # Rï¿½cupï¿½rer et ajouter les lignes de DBMS_OUTPUT ï¿½ la liste
     statusVar = cursor.var(cx_Oracle.NUMBER)
     lineVar = cursor.var(cx_Oracle.STRING)
     while True:
