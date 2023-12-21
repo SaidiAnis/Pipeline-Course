@@ -1,0 +1,132 @@
+RefSousDomaine,SousDomaineDeFormation,formation,MotsCles
+UDEMY_DomaineF-01-01,Web Development,Development,"web, development"
+UDEMY_DomaineF-01-02,Data Science,Development,"data, science"
+UDEMY_DomaineF-01-03,Mobile Development,Development,"mobile, development"
+UDEMY_DomaineF-01-04,Programming Languages,Development,"programming, languages"
+UDEMY_DomaineF-01-05,Game Development,Development,"game, development"
+UDEMY_DomaineF-01-06,Database Design et Development,Development,"database, design, development"
+UDEMY_DomaineF-01-07,Software Testing,Development,"software, testing"
+UDEMY_DomaineF-01-08,Software Engineering,Development,"software, engineering"
+UDEMY_DomaineF-01-09,Software Development Tools,Development,"software, development, tools"
+UDEMY_DomaineF-01-010,No-Code Development,Development,"code, development"
+UDEMY_DomaineF-02-01,Entrepreneurship,Business,entrepreneurship
+UDEMY_DomaineF-02-02,Communication,Business,communication
+UDEMY_DomaineF-02-03,Management,Business,management
+UDEMY_DomaineF-02-04,Sales,Business,sales
+UDEMY_DomaineF-02-05,Business Strategy,Business,"business, strategy"
+UDEMY_DomaineF-02-06,Operations,Business,operations
+UDEMY_DomaineF-02-07,Project Management,Business,"project, management"
+UDEMY_DomaineF-02-08,Business Law,Business,"business, law"
+UDEMY_DomaineF-02-09,Business Analytics et Intelligence,Business,"business, analytics, intelligence"
+UDEMY_DomaineF-02-010,Human Resources,Business,"human, resources"
+UDEMY_DomaineF-02-011,Industry,Business,industry
+UDEMY_DomaineF-02-012,E-Commerce,Business,commerce
+UDEMY_DomaineF-02-013,Media,Business,media
+UDEMY_DomaineF-02-014,Real Estate,Business,"real, estate"
+UDEMY_DomaineF-02-015,Other Business,Business,business
+UDEMY_DomaineF-03-01,Accounting et Bookkeeping,Finance et Accounting,"accounting, bookkeeping"
+UDEMY_DomaineF-03-02,Compliance,Finance et Accounting,compliance
+UDEMY_DomaineF-03-03,Cryptocurrency et Blockchain,Finance et Accounting,"cryptocurrency, blockchain"
+UDEMY_DomaineF-03-04,Economics,Finance et Accounting,economics
+UDEMY_DomaineF-03-05,Finance,Finance et Accounting,finance
+UDEMY_DomaineF-03-06,Finance Cert et Exam Prep,Finance et Accounting,"finance, cert, exam, prep"
+UDEMY_DomaineF-03-07,Financial Modeling et Analysis,Finance et Accounting,"financial, modeling, analysis"
+UDEMY_DomaineF-03-08,Investing et Trading,Finance et Accounting,"investing, trading"
+UDEMY_DomaineF-03-09,Money Management Tools,Finance et Accounting,"money, management, tools"
+UDEMY_DomaineF-03-010,Taxes,Finance et Accounting,taxes
+UDEMY_DomaineF-03-011,Other Finance et Accounting,Finance et Accounting,"finance, accounting"
+UDEMY_DomaineF-04-01,IT Certifications,IT et Software,certifications
+UDEMY_DomaineF-04-02,Network et Security,IT et Software,"network, security"
+UDEMY_DomaineF-04-03,Hardware,IT et Software,hardware
+UDEMY_DomaineF-04-04,Operating Systems et Servers,IT et Software,"operating, systems, servers"
+UDEMY_DomaineF-04-05,Other IT et Software,IT et Software,software
+UDEMY_DomaineF-05-01,Microsoft,Office Productivity,microsoft
+UDEMY_DomaineF-05-02,Apple,Office Productivity,apple
+UDEMY_DomaineF-05-03,Google,Office Productivity,google
+UDEMY_DomaineF-05-04,SAP,Office Productivity,sap
+UDEMY_DomaineF-05-05,Oracle,Office Productivity,oracle
+UDEMY_DomaineF-05-06,Other Office Productivity,Office Productivity,"office, productivity"
+UDEMY_DomaineF-06-01,Personal Transformation,Personal Development,"personal, transformation"
+UDEMY_DomaineF-06-02,Personal Productivity,Personal Development,"personal, productivity"
+UDEMY_DomaineF-06-03,Leadership,Personal Development,leadership
+UDEMY_DomaineF-06-04,Career Development,Personal Development,"career, development"
+UDEMY_DomaineF-06-05,Parenting et Relationships,Personal Development,"parenting, relationships"
+UDEMY_DomaineF-06-06,Happiness,Personal Development,happiness
+UDEMY_DomaineF-06-07,Religion et Spirituality,Personal Development,"religion, spirituality"
+UDEMY_DomaineF-06-08,Personal Brand Building,Personal Development,"personal, brand, building"
+UDEMY_DomaineF-06-09,Creativity,Personal Development,creativity
+UDEMY_DomaineF-06-010,Influence,Personal Development,influence
+UDEMY_DomaineF-06-011,Self Esteem et Confidence,Personal Development,"self, esteem, confidence"
+UDEMY_DomaineF-06-012,Stress Management,Personal Development,"stress, management"
+UDEMY_DomaineF-06-013,Memory et Study Skills,Personal Development,"memory, study, skills"
+UDEMY_DomaineF-06-014,Motivation,Personal Development,motivation
+UDEMY_DomaineF-06-015,Other Personal Development,Personal Development,"personal, development"
+UDEMY_DomaineF-07-01,Web Design,Design,"web, design"
+UDEMY_DomaineF-07-02,Graphic Design et Illustration,Design,"graphic, design, illustration"
+UDEMY_DomaineF-07-03,Design Tools,Design,"design, tools"
+UDEMY_DomaineF-07-04,User Experience Design,Design,"user, experience, design"
+UDEMY_DomaineF-07-05,Game Design,Design,"game, design"
+UDEMY_DomaineF-07-06,3D et Animation,Design,animation
+UDEMY_DomaineF-07-07,Fashion Design,Design,"fashion, design"
+UDEMY_DomaineF-07-08,Architectural Design,Design,"architectural, design"
+UDEMY_DomaineF-07-09,Interior Design,Design,"interior, design"
+UDEMY_DomaineF-07-010,Other Design,Design,design
+UDEMY_DomaineF-08-01,Digital Marketing,Marketing,"digital, marketing"
+UDEMY_DomaineF-08-02,Search Engine Optimization,Marketing,"search, engine, optimization"
+UDEMY_DomaineF-08-03,Social Media Marketing,Marketing,"social, media, marketing"
+UDEMY_DomaineF-08-04,Branding,Marketing,branding
+UDEMY_DomaineF-08-05,Marketing Fundamentals,Marketing,"marketing, fundamentals"
+UDEMY_DomaineF-08-06,Marketing Analytics et Automation,Marketing,"marketing, analytics, automation"
+UDEMY_DomaineF-08-07,Public Relations,Marketing,"public, relations"
+UDEMY_DomaineF-08-08,Paid Advertising,Marketing,"paid, advertising"
+UDEMY_DomaineF-08-09,Video et Mobile Marketing,Marketing,"video, mobile, marketing"
+UDEMY_DomaineF-08-010,Content Marketing,Marketing,"content, marketing"
+UDEMY_DomaineF-08-011,Growth Hacking,Marketing,"growth, hacking"
+UDEMY_DomaineF-08-012,Affiliate Marketing,Marketing,"affiliate, marketing"
+UDEMY_DomaineF-08-013,Product Marketing,Marketing,"product, marketing"
+UDEMY_DomaineF-08-014,Other Marketing,Marketing,marketing
+UDEMY_DomaineF-09-01,Esoteric Practices,Lifestyle,"esoteric, practices"
+UDEMY_DomaineF-09-02,Arts et Crafts,Lifestyle,"arts, crafts"
+UDEMY_DomaineF-09-03,Beauty et Makeup,Lifestyle,"beauty, makeup"
+UDEMY_DomaineF-09-04,Esoteric Practices,Lifestyle,"esoteric, practices"
+UDEMY_DomaineF-09-05,Food et Beverage,Lifestyle,"food, beverage"
+UDEMY_DomaineF-09-06,Gaming,Lifestyle,gaming
+UDEMY_DomaineF-09-07,Home Improvement et Gardening,Lifestyle,"home, improvement, gardening"
+UDEMY_DomaineF-09-08,Pet Care et Training,Lifestyle,"pet, care, training"
+UDEMY_DomaineF-09-09,Travel,Lifestyle,travel
+UDEMY_DomaineF-09-010,Other Lifestyle,Lifestyle,lifestyle
+UDEMY_DomaineF-010-01,Digital Photography,Photography et Video,"digital, photography"
+UDEMY_DomaineF-010-02,Photography,Photography et Video,photography
+UDEMY_DomaineF-010-03,Portrait Photography,Photography et Video,"portrait, photography"
+UDEMY_DomaineF-010-04,Photography Tools,Photography et Video,"photography, tools"
+UDEMY_DomaineF-010-05,Commercial Photography,Photography et Video,"commercial, photography"
+UDEMY_DomaineF-010-06,Video Design,Photography et Video,"video, design"
+UDEMY_DomaineF-010-07,Other Photography et Video,Photography et Video,"photography, video"
+UDEMY_DomaineF-011-01,Fitness,Health et Fitness,fitness
+UDEMY_DomaineF-011-02,General Health,Health et Fitness,"general, health"
+UDEMY_DomaineF-011-03,Sports,Health et Fitness,sports
+UDEMY_DomaineF-011-04,Nutrition et Diet,Health et Fitness,"nutrition, diet"
+UDEMY_DomaineF-011-05,Yoga,Health et Fitness,yoga
+UDEMY_DomaineF-011-06,Mental Health,Health et Fitness,"mental, health"
+UDEMY_DomaineF-011-07,Martial Arts et Self Defense,Health et Fitness,"martial, arts, self, defense"
+UDEMY_DomaineF-011-08,Safety et First Aid,Health et Fitness,"safety, first, aid"
+UDEMY_DomaineF-011-09,Dance,Health et Fitness,dance
+UDEMY_DomaineF-011-010,Meditation,Health et Fitness,meditation
+UDEMY_DomaineF-011-011,Other Health et Fitness,Health et Fitness,"health, fitness"
+UDEMY_DomaineF-012-01,Instruments,Music,instruments
+UDEMY_DomaineF-012-02,Music Production,Music,"music, production"
+UDEMY_DomaineF-012-03,Music Fundamentals,Music,"music, fundamentals"
+UDEMY_DomaineF-012-04,Vocal,Music,vocal
+UDEMY_DomaineF-012-05,Music Techniques,Music,"music, techniques"
+UDEMY_DomaineF-012-06,Music Software,Music,"music, software"
+UDEMY_DomaineF-012-07,Other Music,Music,music
+UDEMY_DomaineF-013-01,Engineering,Teaching et Academics,engineering
+UDEMY_DomaineF-013-02,Humanities,Teaching et Academics,humanities
+UDEMY_DomaineF-013-03,Math,Teaching et Academics,math
+UDEMY_DomaineF-013-04,Science,Teaching et Academics,science
+UDEMY_DomaineF-013-05,Online Education,Teaching et Academics,"online, education"
+UDEMY_DomaineF-013-06,Social Science,Teaching et Academics,"social, science"
+UDEMY_DomaineF-013-07,Language Learning,Teaching et Academics,"language, learning"
+UDEMY_DomaineF-013-08,Teacher Training,Teaching et Academics,"teacher, training"
+UDEMY_DomaineF-013-09,Test Prep,Teaching et Academics,"test, prep"
+UDEMY_DomaineF-013-010,Other Teaching et Academics,Teaching et Academics,"teaching, academics"
