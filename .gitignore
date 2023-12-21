@@ -1,0 +1,4 @@
+#firebase configurations
+secrets.json
+#caches
+_pycache_/
