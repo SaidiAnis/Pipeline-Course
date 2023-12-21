@@ -1,0 +1,13 @@
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-01', 'Development','development');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-02', 'Business','business');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-03', 'Finance et Accounting','finance, accounting');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-04', 'IT et Software','software');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-05', 'Office Productivity','office, productivity');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-06', 'Personal Development','personal, development');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-07', 'Design','design');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-08', 'Marketing','marketing');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-09', 'Lifestyle','lifestyle');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-010', 'Photography et Video','photography, video');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-011', 'Health et Fitness','health, fitness');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-012', 'Music','music');
+INSERT INTO DomaineFormation (RefDomaine, DomaineDeFormation,MotsCles) VALUES ('UDEMY_DomaineF-013', 'Teaching et Academics','teaching, academics');

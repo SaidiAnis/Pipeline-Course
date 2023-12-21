@@ -1,0 +1,15 @@
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-01-01', 'COURSERA_DomaineF-01', 'Computer Security and Networks');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-01-02', 'COURSERA_DomaineF-01', 'Design and Product');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-01-03', 'COURSERA_DomaineF-01', 'Software Development');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-01-04', 'COURSERA_DomaineF-01', 'Algorithms');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-01-05', 'COURSERA_DomaineF-01', 'Mobile and Web Development');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-02-06', 'COURSERA_DomaineF-02', 'Data Analysis');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-02-07', 'COURSERA_DomaineF-02', 'Machine Learning');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-03-08', 'COURSERA_DomaineF-03', 'Leadership and Management');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-03-09', 'COURSERA_DomaineF-03', 'Marketing');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-03-10', 'COURSERA_DomaineF-03', 'Business Essentials');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-03-11', 'COURSERA_DomaineF-03', 'Business Strategy');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-04-12', 'COURSERA_DomaineF-04', 'Support and Operations');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-04-13', 'COURSERA_DomaineF-04', 'Cloud Computing');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-04-14', 'COURSERA_DomaineF-04', 'Data Management');
+INSERT INTO SousDomaineFormation (RefSousDomaine, RefDomaine, SousDomaineDeFormation) VALUES ('COURSERA_DomaineF-04-15', 'COURSERA_DomaineF-04', 'Security');
