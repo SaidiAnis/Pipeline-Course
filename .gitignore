@@ -1,4 +1,6 @@
 #firebase configurations
 secrets.json
 #caches
-_pycache_/
+# Correct .gitignore entry to ignore Python cache
+__pycache__
+
