@@ -25,8 +25,6 @@ def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
     """
     modify = st.checkbox("Add filters")
 
-    
-
     if not modify:
         return df
 
@@ -285,9 +283,6 @@ def app ():
     """)
 
     #filter_duree = filter_formateurs = filter_notes = None
-
-
-
     connection = get_database_connection()
     if connection:
 
@@ -304,7 +299,7 @@ def app ():
             # Apply the filter_dataframe function to the stored search results
             filtered_df = filter_dataframe(st.session_state.search_results)
 
-            values_to_drop = ['REFSOUSSOUSDOMAINEF', 'REFSOUSDOMAINEF','NOMBRE_PARTICIPANTS']
+            values_to_drop = ['REFSOUSSOUSDOMAINEF', 'REFSOUSDOMAINEF']
 
             filtered_df = filtered_df.drop(columns=values_to_drop)
             # Display the (filtered) DataFrame
@@ -317,7 +312,7 @@ def app ():
 
             # Convert the other columns to categorical
             categorical_columns = [ "LE_NOM", "DESCRIPTIO", "NOTES",
-                                 "NIVEAU", "LIENS", "DESTINATAIRES", "FORMATEURS",
+                                "NOMBRE_PARTICIPANTS", "NIVEAU", "LIENS", "DESTINATAIRES", "FORMATEURS",
                                 "CHAPITRE", "COMPETENCES_GAGNEES", "ORGANISATION", "MOTSCLES", "PRIX"]
 
             filtered_df[categorical_columns] = filtered_df[categorical_columns].astype("str")
