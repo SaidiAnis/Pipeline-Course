@@ -1,122 +1,150 @@
-CREATE OR REPLACE FUNCTION trouver_ligne_avec_mot_similaire(
-    column_value IN VARCHAR2, 
-    search_string IN VARCHAR2
-) RETURN INTEGER
+CREATE OR REPLACE FUNCTION trouver_ligne_avec_mot_similaire(column_value IN VARCHAR2, search_string IN VARCHAR2)
+RETURN VARCHAR2
 IS
     word VARCHAR2(100);
     position INTEGER := 1;
     next_space INTEGER;
-    similarity_threshold INTEGER := 75; -- Seuil de similarit� pour Jaro-Winkler
-    levenshtein_threshold INTEGER := 2; -- Seuil pour la distance de Levenshtein pour les mots courts
-    highest_similarity INTEGER := 0; -- Plus haut score de similarit� trouv�
+    similarity_threshold INTEGER := 70; -- Seuil de similarit? (70%)
     current_similarity INTEGER;
-    levenshtein_distance INTEGER;
 BEGIN
     LOOP
         next_space := INSTR(column_value, ' ', position);
+
+        -- Extraire le mot
         IF next_space != 0 THEN
             word := SUBSTR(column_value, position, next_space - position);
         ELSE
             word := SUBSTR(column_value, position);
         END IF;
 
-        IF LENGTH(search_string) <= 3 THEN
-            levenshtein_distance := UTL_MATCH.EDIT_DISTANCE(UPPER(word), UPPER(search_string));
-            IF levenshtein_distance <= levenshtein_threshold THEN
-                current_similarity := 100; -- Score maximal pour une correspondance exacte
-            ELSE
-                current_similarity := 50; -- Score de 50% si le seuil n'est pas atteint
-            END IF;
+        -- Calculer la similarit? Jaro-Winkler
+        current_similarity := UTL_MATCH.JARO_WINKLER_SIMILARITY(UPPER(word), UPPER(search_string));
+
+        -- V?rifier si la similarit? d?passe le seuil
+        IF current_similarity >= similarity_threshold THEN
+            RETURN column_value; -- Retourner la ligne enti?re si la condition est remplie
+        END IF;
+
+        -- Pr?parer la position pour le prochain mot
+        position := next_space + 1;
+
+        -- Sortir de la boucle si la fin de la cha?ne est atteinte
+        EXIT WHEN next_space = 0 OR next_space IS NULL;
+    END LOOP;
+
+    RETURN NULL; -- Retourner NULL si aucun mot similaire n'est trouv?
+END trouver_ligne_avec_mot_similaire;
+/
+
+
+CREATE OR REPLACE FUNCTION trouver_lignes_avec_mots_similaires(
+    search_string IN VARCHAR2
+) RETURN VARCHAR2
+IS
+    result_lines VARCHAR2(32767); -- Stockera les lignes correspondantes
+    column_value_motscles VARCHAR2(4000); -- Valeur de la colonne motscles
+    column_value_le_nom VARCHAR2(4000); -- Valeur de la colonne LE_NOM
+    word VARCHAR2(100);
+    position INTEGER;
+    next_space INTEGER;
+    all_words_matched BOOLEAN;
+    search_words DBMS_SQL.VARCHAR2A;
+    i INTEGER;
+BEGIN
+    -- D?couper la cha?ne de recherche en mots
+    search_words := DBMS_SQL.VARCHAR2A();
+    i := 1;
+    position := 1;
+
+    LOOP
+        next_space := INSTR(search_string, ' ', position);
+        IF next_space != 0 THEN
+            word := SUBSTR(search_string, position, next_space - position);
         ELSE
-            current_similarity := UTL_MATCH.JARO_WINKLER_SIMILARITY(UPPER(word), UPPER(search_string));
+            word := SUBSTR(search_string, position);
         END IF;
-
-        IF current_similarity > highest_similarity THEN
-            highest_similarity := current_similarity;
-        END IF;
-
+        search_words(i) := word;
+        i := i + 1;
         position := next_space + 1;
         EXIT WHEN next_space = 0 OR next_space IS NULL;
     END LOOP;
 
-    IF highest_similarity >= similarity_threshold THEN
-        RETURN highest_similarity;
-    ELSE
-        RETURN 0;
-    END IF;
-END trouver_ligne_avec_mot_similaire;
-/
-
-drop table temp_resultats;
-CREATE GLOBAL TEMPORARY TABLE temp_resultats (
-    RefSOUSSOUSDomaineF VARCHAR2(200),
-    RefSOUSDomaineF VARCHAR2(200),
-    Le_nom CLOB,
-    Descriptio CLOB,
-    Notes VARCHAR2(50),
-    Nombre_avis VARCHAR2(25),
-    Duree VARCHAR2(50),
-    Nombre_participants INTEGER,
-    Niveau VARCHAR2(50),
-    Liens CLOB,
-    Destinataires CLOB,
-    Formateurs CLOB,
-    Chapitre CLOB,
-    Competences_gagnees CLOB,
-    Organisation CLOB,
-    MotsCles VARCHAR2(300),
-    prix VARCHAR2(30),
-    score INTEGER -- Champ suppl�mentaire pour le score
-) ON COMMIT DELETE ROWS;
-
-CREATE OR REPLACE FUNCTION trouver_lignes_avec_mots_similaires(
-    search_string IN VARCHAR2
-) RETURN SYS_REFCURSOR
-IS
-    result_cursor SYS_REFCURSOR;
-    sum_scores INTEGER;
-    count_scores INTEGER;
-    avg_score INTEGER;
-BEGIN
-    DELETE FROM temp_resultats;
-
-    FOR rec IN (SELECT * FROM SOUSSOUSDomaineFormation)
+    FOR rec IN (SELECT motscles, LE_NOM FROM soussousdomaineformation)
     LOOP
-        sum_scores := 0;
-        count_scores := 0;
+        column_value_motscles := rec.motscles;
+        column_value_le_nom := rec.LE_NOM;
 
-        FOR search_word IN (SELECT REGEXP_SUBSTR(search_string, '[^ ]+', 1, LEVEL) AS word
-                            FROM DUAL
-                            CONNECT BY REGEXP_SUBSTR(search_string, '[^ ]+', 1, LEVEL) IS NOT NULL)
-        LOOP
-            sum_scores := sum_scores + trouver_ligne_avec_mot_similaire(rec.MotsCles, search_word.word);
-            count_scores := count_scores + 1;
+        -- V?rifier si tous les mots ont un similaire dans la ligne
+        all_words_matched := TRUE;
+        FOR j IN 1..search_words.COUNT LOOP
+            IF trouver_ligne_avec_mot_similaire(column_value_motscles, search_words(j)) IS NULL THEN
+                all_words_matched := FALSE;
+                EXIT;
+            END IF;
         END LOOP;
 
-        IF count_scores > 0 THEN
-            avg_score := sum_scores / count_scores;
-        ELSE
-            avg_score := NULL;
-        END IF;
-
-        IF avg_score IS NOT NULL THEN
-            INSERT INTO temp_resultats (
-                RefSOUSSOUSDomaineF, RefSOUSDomaineF, Le_nom, Descriptio, Notes, Nombre_avis, Duree,
-                Nombre_participants, Niveau, Liens, Destinataires, Formateurs, Chapitre, Competences_gagnees,
-                Organisation, MotsCles, prix, score
-            ) VALUES (
-                rec.RefSOUSSOUSDomaineF, rec.RefSOUSDomaineF, rec.Le_nom, rec.Descriptio, rec.Notes, rec.Nombre_avis,
-                rec.Duree, rec.Nombre_participants, rec.Niveau, rec.Liens, rec.Destinataires, rec.Formateurs,
-                rec.Chapitre, rec.Competences_gagnees, rec.Organisation, rec.MotsCles, rec.prix, avg_score
-            );
+        IF all_words_matched THEN
+            -- Ajouter la valeur de LE_NOM aux r?sultats
+            result_lines := result_lines || column_value_le_nom || '; ';
         END IF;
     END LOOP;
 
-    OPEN result_cursor FOR SELECT * FROM temp_resultats ORDER BY score DESC;
-    RETURN result_cursor;
+    RETURN result_lines; -- Retourner la cha?ne de r?sultats
 END trouver_lignes_avec_mots_similaires;
 /
 
 
+SET SERVEROUTPUT ON
+
+DECLARE
+    result VARCHAR2(32767);
+BEGIN
+    -- Replace 'your_search_string' with the actual search string
+    result := trouver_lignes_avec_mots_similaires('Achats publics');
+
+    -- Output the result
+    DBMS_OUTPUT.PUT_LINE('Matching lines: ' || result);
+END;
+
+/
+
+CREATE OR REPLACE PROCEDURE display_matching_lines(search_string IN VARCHAR2) IS
+    TYPE result_rec IS RECORD (
+        le_nom VARCHAR2(4000)
+    );
+    TYPE result_table IS TABLE OF result_rec INDEX BY PLS_INTEGER;
+    results result_table;
+    i INTEGER := 1;
+BEGIN
+    -- Replace 'your_search_string' with the actual search string
+    FOR rec IN (SELECT LE_NOM FROM soussousdomaineformation WHERE trouver_lignes_avec_mots_similaires(search_string) LIKE '%' || LE_NOM || '%') LOOP
+        results(i).le_nom := rec.LE_NOM;
+        i := i + 1;
+    END LOOP;
+
+    -- Output the result in a table format
+    DBMS_OUTPUT.PUT_LINE('Matching lines:');
+    FOR j IN 1..results.COUNT LOOP
+        DBMS_OUTPUT.PUT_LINE('Row ' || j || ': ' || results(j).le_nom);
+    END LOOP;
+END display_matching_lines;
+/
+
+SET SERVEROUTPUT ON
+
+
+CREATE OR REPLACE PROCEDURE display_matching_lines_python(
+    search_string IN VARCHAR2, 
+    result_cursor OUT SYS_REFCURSOR
+) IS
+BEGIN
+    OPEN result_cursor FOR
+        SELECT LE_NOM, Notes, Duree, Formateurs, Liens 
+        FROM soussousdomaineformation
+        WHERE trouver_lignes_avec_mots_similaires(search_string) LIKE '%' || LE_NOM || '%';
+END display_matching_lines_python;
+/
+
+SELECT OBJECT_NAME, STATUS FROM USER_OBJECTS WHERE OBJECT_TYPE = 'PROCEDURE' AND OBJECT_NAME = 'DISPLAY_MATCHING_LINES_PYTHON';
 
 
