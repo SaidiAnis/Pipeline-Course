@@ -283,6 +283,9 @@ def app ():
     """)
 
     #filter_duree = filter_formateurs = filter_notes = None
+
+
+
     connection = get_database_connection()
     if connection:
 
