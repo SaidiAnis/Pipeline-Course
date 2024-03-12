@@ -1,0 +1,58 @@
+
+# Documentation des fonctions de recherche SQL
+
+## Vue d'ensemble
+Ce document fournit un aperçu de deux fonctions SQL conçues pour la recherche de données textuelles au sein d'une base de données Oracle SQL. Ces fonctions exploitent les capacités de comparaison de chaînes intégrées d'Oracle pour mettre en œuvre une logique de recherche personnalisée qui peut être adaptée aux besoins spécifiques d'une application.
+
+### Fonctions
+
+1. **trouver_ligne_avec_mot_similaire**
+2. **trouver_lignes_avec_mots_similaires**
+
+## Description des fonctions
+
+### 1. trouver_ligne_avec_mot_similaire
+
+#### But
+Détermine la similarité entre une chaîne de recherche donnée et des mots individuels dans une valeur de colonne. Elle retourne le score de similarité le plus élevé basé soit sur des correspondances exactes pour les mots courts (trois lettres ou moins) soit sur la similarité Jaro-Winkler pour les mots plus longs.
+
+#### Entrées
+- `column_value` VARCHAR2 : Les données de la colonne à rechercher.
+- `search_string` VARCHAR2 : Le terme de recherche.
+
+#### Sorties
+- INTEGER : Le score de similarité le plus élevé trouvé.
+
+#### Points forts
+- Utilise des correspondances exactes pour les mots de trois lettres ou moins, soulignant la précision dans les recherches de mots-clés courts.
+- Emploie la fonction de similarité Jaro-Winkler pour les mots plus longs, offrant une mesure robuste de similarité qui prend en compte les erreurs mineures ou les variations d'orthographe.
+
+### 2. trouver_lignes_avec_mots_similaires
+
+#### But
+Recherche les lignes dans une table où la colonne `MotsCles` contient des mots similaires à n'importe lequel des mots dans la chaîne de recherche donnée. Elle retourne un curseur pointant vers les résultats filtrés et notés en fonction de leur pertinence par rapport aux termes de recherche.
+
+#### Entrées
+- `search_string` VARCHAR2 : Le terme de recherche, potentiellement contenant plusieurs mots.
+
+#### Sorties
+- SYS_REFCURSOR : Un curseur pour itérer sur les résultats triés par leur score de similarité moyen.
+
+#### Points forts
+- Agrège les scores de similarité à travers plusieurs mots de recherche pour calculer un score moyen pour chaque ligne, privilégiant les lignes ayant une pertinence plus élevée.
+- Filtre les lignes qui ne répondent pas à un seuil de similarité défini, assurant que seuls les résultats suffisamment pertinents sont retournés.
+
+## Forces et limites
+
+### Forces
+- Logique de recherche adaptée pouvant différencier le besoin de correspondances exactes dans les mots courts et une similarité plus flexible pour les termes plus longs.
+- Capacité à traiter plusieurs termes de recherche et à agréger leurs scores de pertinence, fournissant une mesure nuancée de la pertinence globale.
+- Seuils de similarité personnalisables pour affiner l'équilibre entre précision et rappel.
+
+### Limites
+- Dépendance vis-à-vis des fonctions et caractéristiques spécifiques à Oracle, limitant la portabilité à travers différents systèmes de base de données SQL.
+- La performance peut varier selon la taille du jeu de données et la complexité des termes de recherche, pouvant nécessiter une optimisation pour les applications à grande échelle.
+- La logique fixe pour gérer les mots courts par rapport aux mots longs peut ne pas convenir à tous les cas d'usage ou langues, où la distinction entre mots courts et longs pourrait affecter différemment la précision de la recherche.
+
+## Scénarios d'utilisation
+Ces fonctions sont particulièrement bien adaptées aux applications où la précision et la pertinence de la recherche sont critiques, telles que dans les systèmes de gestion de contenu, les bases de données de support client ou les catalogues de produits. Elles permettent des recherches nuancées pouvant accommoder les variations des entrées utilisateur tout en s'assurant que les résultats les plus pertinents sont privilégiés.
