@@ -1,3 +1,9 @@
+-----WARNING !!!! il y a les version non modifié des fonctions dans le fichier et en dessous les nouvelles versions, le tout séparé par un "---------------------------------------".
+-----====================================================
+-----====================================================
+-----====================================================
+-----====================================================
+
 
 # Documentation des fonctions de recherche SQL
 
