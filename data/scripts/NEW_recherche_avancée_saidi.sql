@@ -1,3 +1,9 @@
+-----WARNING !!!! il y a les version non modifié des fonctions dans le fichier et en dessous les nouvelles versions, le tout séparé par un "---------------------------------------".
+-----====================================================
+-----====================================================
+-----====================================================
+-----====================================================
+
 CREATE OR REPLACE FUNCTION trouver_ligne_avec_mot_similaire(
     column_value IN VARCHAR2, 
     search_string IN VARCHAR2
