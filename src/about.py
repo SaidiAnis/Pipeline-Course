@@ -4,7 +4,7 @@ def app():
     st.markdown("""
     <style>
     [data-testid="stAppViewContainer"] > .main {
-        background: linear-gradient(45deg, #fffbf0, #ffe6d9);
+        background: linear-gradient(45deg, #00008B, #ffe6d9);
     }
     .icon {
         font-size: 1.5em;
@@ -35,3 +35,6 @@ def app():
     )
 
     # Rest of your content...
+# Run the app
+if __name__ == "__main__":
+    app()

@@ -1,23 +1,15 @@
 -------------------Homogenisation de notes | format : '4.5' toujours sur 5
 UPDATE SOUSSOUSDomaineFormation
 SET notes = 
-    TO_CHAR(
-        CASE 
-            WHEN REGEXP_LIKE(notes, '^\d+([,.]\d+)?$') THEN 
-                -- Convertit directement si c'est déjà un nombre
-                TO_NUMBER(REPLACE(notes, ',', '.'))
-            ELSE
-                -- Extrait le nombre d'une chaîne plus complexe
-                TO_NUMBER(
-                    REPLACE(
-                        REGEXP_SUBSTR(notes, '\d+([,.]\d+)?'), 
-                        ',', 
-                        '.'
-                    )
-                )
-        END, 'FM999D9'
-    )
+    CASE 
+        WHEN REGEXP_LIKE(notes, '^\d+([,.]\d+)?$') THEN 
+            TO_CHAR(TO_NUMBER(REPLACE(notes, ',', '.')), 'FM999D9')
+        ELSE
+            notes
+    END
 WHERE NOT REGEXP_LIKE(notes, '^\d+([,.]\d+)?$');
+
+
 
 
 -------------------------------------------------------------------------------

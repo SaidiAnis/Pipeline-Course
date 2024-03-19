@@ -24,12 +24,12 @@ def app():
 
         /* Input field text color */
         .stTextInput > div > div > input {
-            color: black !important;
+            color: white !important;
         }
 
         /* Password field text color */
         .stTextInput input[type=password] {
-            color: black !important;
+            color: white !important;
         }
 
         /* Button Styles */
@@ -69,7 +69,7 @@ def app():
             padding-left: 4px;
             padding-bottom: 3px;
             margin: 4px;
-            color: black !important;
+            color: white !important;
         }
         </style>
     """, unsafe_allow_html=True)

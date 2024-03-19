@@ -303,3 +303,4 @@ COMMENT ON COLUMN Appartenir.organismeformation_SIREN IS 'Identifiant SIREN de l
 COMMENT ON TABLE Inscription IS 'Table contenant les inscriptions des clients apprenants aux sessions de formation.';
 COMMENT ON COLUMN Inscription.IdClient IS 'Identifiant du client apprenant inscrit à la session.';
 COMMENT ON COLUMN Inscription.IdLaSession IS 'Identifiant de la session de formation à laquelle le client est inscrit.';
+

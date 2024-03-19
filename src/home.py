@@ -2,6 +2,9 @@ import streamlit as st
 import cx_Oracle
 import pandas as pd
 import oracledb
+import spacy
+from spacy.lang.fr.stop_words import STOP_WORDS as fr_stop
+
 
 from pandas.api.types import (
     is_categorical_dtype,
@@ -11,10 +14,86 @@ from pandas.api.types import (
 )
 import pandas as pd
 import streamlit as st
+from googletrans import Translator
+from googletrans import Translator
+
+def translate_to_english(word):
+    translator = Translator()
+    translation = translator.translate(word, dest='en')
+    return translation.text
+  # This will print the translated word, which is 'Hello' for 'Hola'.
+
+
+
+from IPython.display import HTML
+
+# Format the 'Liens' column to be clickable
+def make_clickable(val):
+    return f'<a href="{val}" target="_blank">{val}</a>'
+
+def display_dataframe_in_pages(df, page_size=10):
+    if df.empty:
+        st.write("No data to display.")
+        return
+
+    # Calculate total number of pages
+    total_rows = len(df)
+    total_pages = (total_rows + page_size - 1) // page_size  # Round up division
+
+    # Let the user select a page
+    page_number = st.selectbox("Select page", range(1, total_pages + 1), format_func=lambda x: f"Page {x}")
+
+    # Calculate start and end indices of the selected page
+    start_idx = (page_number - 1) * page_size
+    end_idx = start_idx + page_size
+
+    # Slice the DataFrame for the selected page
+    df_page = df.iloc[start_idx:end_idx]
+
+    # Display the DataFrame for the current page
+    #st.dataframe(df_page)
+    st.data_editor(
+        df_page,
+        column_config={
+            "Liens": st.column_config.LinkColumn("Liens")
+        },
+        hide_index=True,
+    )
+
+
+
+def apply_custom_styles():
+    # Define your dark blue color
+    dark_blue_color = "#00008B"  # This is just an example of dark blue, adjust the hex code as needed
+
+    # Apply custom CSS
+    st.markdown(f"""
+        <style>
+        /* Targeting specific Streamlit elements */
+        /* Checkbox labels */
+        .stCheckbox label {{
+            color: {dark_blue_color} !important;
+        }}
+
+        /* Text of specific markdown elements, adjust the class as needed */
+        .markdown-text-container {{
+            color: {dark_blue_color} !important;
+        }}
+
+        /* For other specific text elements you might add custom classes via markdown and target them here */
+        .custom-text-class {{
+            color: {dark_blue_color} !important;
+        }}
+        </style>
+        """, unsafe_allow_html=True)
+
+# Call the function to apply custom styles
+apply_custom_styles()
+
 
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
-    """
+    """ 
     Adds a UI on top of a dataframe to let viewers filter columns
 
     Args:
@@ -93,8 +172,6 @@ def make_clickable(link):
     return f'<a target="_blank" href="{link}">{link}</a>'
 
 
-import spacy
-from spacy.lang.fr.stop_words import STOP_WORDS as fr_stop
 
 # Charger le modèle français
 nlp = spacy.load("fr_core_news_sm")
@@ -122,92 +199,53 @@ oracledb.defaults.fetch_lobs = False
 
 
 def fetch_search_results(search_term):
+    search_term = translate_to_english(search_term)
+
     corrected_keyword=filter_keywords_spacy(search_term)
 
     # Oracle database connection string - modify with your details
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='xe')
-    connection = cx_Oracle.connect(user='sys', password='projet_bda',mode=cx_Oracle.SYSDBA, dsn=dsn_tns)
+    connection = cx_Oracle.connect(user='sys', password='Zbelzbel123&',mode=cx_Oracle.SYSDBA, dsn=dsn_tns)
 
    
     # Create a cursor
     cursor = connection.cursor()
-    cursor.callproc("dbms_output.enable")
+    result_cursor = cursor.callfunc('trouver_lignes_avec_mots_similaires', cx_Oracle.CURSOR, [search_term])
+    result_list = result_cursor.fetchall()
+    df = pd.DataFrame(result_list, columns=["RefSOUSSOUSDomaineF", "RefSOUSDomaineF", "Le_nom", "Descriptio", "Notes", "Nombre_avis", "Duree", "Nombre_participants", "Niveau", "Liens", "Destinataires", "Formateurs", "Chapitre", "Competences_gagnees", "Organisation", "MotsCles", "prix", "Score"])
 
-    # Call the PL/SQL function to retrieve course names
-    cursor.execute("""
-    DECLARE
-        resultat VARCHAR2(32767);
-    BEGIN
-        resultat := trouver_lignes_avec_mots_similaires(:keyword);
-        DBMS_OUTPUT.PUT_LINE(resultat);
-    END;
-    """, keyword=corrected_keyword)
+    subset_df = df[["Le_nom", "Descriptio", "Notes", "Nombre_avis", "Duree", "Nombre_participants", "Niveau", "Liens", "Organisation","prix", "Score"]]
+    subset_df['Organisation'] = df['RefSOUSSOUSDomaineF'].apply(lambda x: x.split('_')[0] if isinstance(x, str) else x)
+    # Renommage des colonnes
+    subset_df = subset_df.rename(columns={'Le_nom': 'Nom_formation', 'Descriptio': 'Description'})
 
 
+    nombre_de_formations = len(subset_df)
+    noms_de_formations = ['formation ' + str(i+1) for i in range(nombre_de_formations)]
+    subset_df['formations'] = noms_de_formations
 
-       # Liste pour stocker les résultats de DBMS_OUTPUT
-    results = []
 
-    # Récupérer et ajouter les lignes de DBMS_OUTPUT à la liste
-    statusVar = cursor.var(cx_Oracle.NUMBER)
-    lineVar = cursor.var(cx_Oracle.STRING)
-    while True:
-        cursor.callproc("dbms_output.get_line", (lineVar, statusVar))
-        if statusVar.getvalue() != 0:
-            break
-    
-        print('aw')
-        results.append(lineVar.getvalue())
-        print(results)
+    subset_df['Notes'] = subset_df['Notes'].fillna(0)
+    subset_df['Nombre_avis'] = subset_df['Nombre_avis'].fillna(0)
+    subset_df['Nombre_participants'] = subset_df['Nombre_participants'].fillna(0)
 
-    # Traiter les résultats si non vides
-    if results[0]:
-        # Diviser la première chaîne de caractères en utilisant ';' comme séparateur
-        results = results[0].split(';')
-        
-        # Supprimer les espaces blancs et les chaînes vides de la liste
-        results = [item.strip() for item in results if item.strip()]
+        # After creating the 'formations' column
+    subset_df['formations'] = noms_de_formations
 
-    print(len(results))
-    print(type(results))
-    print(results)
-    
+    # Reorder columns to make 'formations' the first column
+    cols = ['formations'] + [col for col in subset_df.columns if col != 'formations']
+    subset_df = subset_df[cols]
+    subset_df.style.format({'Liens': make_clickable})
+
+    # Capitalize the first letter of each string in 'formations' and 'Organisation' columns
+    subset_df['formations'] = subset_df['formations'].str.capitalize()
+    subset_df['Organisation'] = subset_df['Organisation'].str.capitalize() if 'Organisation' in subset_df.columns else subset_df['organisation'].str.capitalize()
+
+    # Continue with your DataFrame operations
 
 
 
-
-
-    # Prepare the SQL query with CLOB to VARCHAR2 conversion
-    query = """
-        SELECT * FROM SOUSSOUSDomaineFormation 
-        WHERE DBMS_LOB.SUBSTR(Le_nom, 4000, 1) IN (:course_names)
-    """
-
-    dfs=[]
-    for course_name in results :
-        # Assuming results[4] is a single course name
-        
-        
-        # Execute thse query
-        cursor.execute(query, course_names=course_name)
-
-
-        # Fetch all rows
-        rows = cursor.fetchall()
-
-        # Get column names from the cursor description
-        columns = [col[0] for col in cursor.description]
-    
-        # Create DataFrame from the fetched data
-        df = pd.DataFrame(rows, columns=columns)
-
-        dfs.append(df)
-
-    final_df = pd.concat(dfs, ignore_index=True)
-
-
-
-    return final_df
+    return subset_df
 
 
 def get_database_connection():
@@ -224,68 +262,62 @@ def get_database_connection():
 
 
 # Set the page configuration for title and favicon
-def app (): 
-    
-    #session_state = st.session_state
-    # Define custom colors and fonts
-
-
-    primary_color = "#6C5CE7"
-    background_color = "#bbbbbb"
+def app() :   # Custom colors and fonts
+    primary_color = "#2b2b8d"
+    background_color = "#f7f7f7"
     text_color = "#333333"
-    font = "Arial"
+    font = "Roboto"
 
     # Apply custom CSS styles
     st.markdown(f"""
         <style>
+        /* Main container background */
         [data-testid="stAppViewContainer"] > .main {{
-            background: linear-gradient(45deg, #f0f0f0, #dddddd);
+            background-color: {background_color};
         }}
-            body {{
-                background-color: {background_color};
-                font-family: {font}, sans-serif;
-            }}
-            .stTextInput > label, .stButton > button {{
-                color: {text_color};
-            }}
-            .stTextInput > div > div > input {{
-                color: {text_color};
-                background-color: #f4f4f4; /* Background color for the input */
-                border: 2px solid {primary_color};
-                border-radius: 30px; /* Add rounded corners to the input */
-                padding: 12px 20px; /* Add padding to the input */
-                width: 100%; /* Make the input full-width */
-                font-size: 18px; /* Adjust font size */
-                box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.1); /* Add a subtle box shadow */
-            }}
-            .stButton > button {{
-                border: 2px solid {primary_color};
-                color: {background_color};
-                background-color: {primary_color};
-                border-radius: 30px; /* Add rounded corners to the button */
-                padding: 12px 25px; /* Add padding to the button */
-                font-size: 18px; /* Adjust font size */
-            }}
-            .stButton > button:hover {{
-                background-color: {text_color};
-                border-color: {text_color};
-                color: {primary_color};
-            }}
+        /* Full body customization */
+        body {{
+            color: {text_color};
+            font-family: '{font}', sans-serif;
+        }}
+        /* Input and button label color */
+        .stTextInput > label, .stButton > button {{
+            color: {text_color};
+        }}
+        /* Customizing input fields */
+        .stTextInput > div > div > input {{
+            border: 2px solid {primary_color};
+            border-radius: 20px;
+            padding: 10px;
+            font-size: 16px;
+        }}
+        /* Button customization */
+        .stButton > button {{
+            border: 2px solid {primary_color};
+            background-color: {primary_color};
+            color: {background_color};
+            border-radius: 20px;
+            padding: 10px 15px;
+            font-size: 16px;
+            transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+        }}
+        /* Button hover effect */
+        .stButton > button:hover {{
+            background-color: {text_color};
+            color: {primary_color};
+        }}
         </style>
         """, unsafe_allow_html=True)
 
-    # Title and description at the top
-    st.markdown(f'<h1 style="color:{primary_color}; text-align:center;">Digital Courses Hub</h1>', unsafe_allow_html=True)
-    st.markdown("""
-        LEARN FROM THE BEST ONLINE COURSES!
-        
-        Welcome to Digital Courses Hub, your gateway to top-quality education. Explore a curated selection of courses from industry-leading platforms such as Udemy, Coursera, and Cegos, and embark on a journey of learning and growth with the best online courses available.
-    """)
-
-    #filter_duree = filter_formateurs = filter_notes = None
-
-
-
+    # Title and description with improved styling
+    st.markdown(f'<h1 style="color:{primary_color}; text-align:center; font-family:{font};">Digital Courses Hub</h1>', unsafe_allow_html=True)
+    st.markdown(f"""
+        <div style="text-align: center; font-family: {font}; color: {text_color};">
+            <p>LEARN FROM THE BEST ONLINE COURSES!</p>
+            <p>Welcome to Digital Courses Hub, your gateway to top-quality education. Explore a curated selection of courses from industry-leading platforms such as Udemy, Coursera, and Cegos, and embark on a journey of learning and growth with the best online courses available.</p>
+        </div>
+        """, unsafe_allow_html=True)
+    
     connection = get_database_connection()
     if connection:
 
@@ -301,27 +333,27 @@ def app ():
         if not st.session_state.search_results.empty:
             # Apply the filter_dataframe function to the stored search results
             filtered_df = filter_dataframe(st.session_state.search_results)
+            display_dataframe_in_pages(filtered_df, page_size=10)  # Example: Set page size to 10 rows
 
-            values_to_drop = ['REFSOUSSOUSDOMAINEF', 'REFSOUSDOMAINEF']
 
-            filtered_df = filtered_df.drop(columns=values_to_drop)
-            # Display the (filtered) DataFrame
+            #values_to_drop = ['RefSOUSSOUSDomaineF', 'RefSOUSDomaineF']
+
+            #filtered_df = filtered_df.drop(columns=values_to_drop)
+            # Display the (filtered) DataFramef
             # Convert "NOMBRE_AVIS" and "DUREE" columns to float
-            filtered_df["NOMBRE_AVIS"] = filtered_df["NOMBRE_AVIS"].astype(float)
-            filtered_df["DUREE"] = filtered_df["DUREE"].astype("str")
+            #filtered_df["NOMBRE_AVIS"] = filtered_df["NOMBRE_AVIS"].astype(float)
+            filtered_df["Duree"] = filtered_df["Duree"].astype("str")
             
 
             print(filtered_df.columns)
 
             # Convert the other columns to categorical
-            categorical_columns = [ "LE_NOM", "DESCRIPTIO", "NOTES",
-                                "NOMBRE_PARTICIPANTS", "NIVEAU", "LIENS", "DESTINATAIRES", "FORMATEURS",
-                                "CHAPITRE", "COMPETENCES_GAGNEES", "ORGANISATION", "MOTSCLES", "PRIX"]
+            categorical_columns = ["Notes", "Nombre_avis", "Duree", "Nombre_participants", "Niveau", "Organisation","prix", "Score"]
 
             filtered_df[categorical_columns] = filtered_df[categorical_columns].astype("str")
 
-            print(filtered_df.dtypes)
-            st.dataframe(filtered_df)
+            #print(filtered_df.dtypes)
+            #st.dataframe(filtered_df)
 
            
 

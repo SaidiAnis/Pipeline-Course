@@ -52,4 +52,4 @@ SELECT RefSOUSSOUSDomaineF, MotsCles, generate_initials(MotsCles) AS initiaux
 FROM SOUSSOUSDomaineFormation;
 
 
-Select * from table_init
+Select * from table_init;
