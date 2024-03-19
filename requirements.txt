@@ -3,6 +3,7 @@ cx_Oracle
 pandas
 oracledb
 #spacy
+ipython
 googletrans==4.0.0-rc1
 firebase-admin
 streamlit-option-menu
