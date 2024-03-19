@@ -5,5 +5,5 @@ oracledb
 spacy
 googletrans==4.0.0-rc1
 firebase-admin
-streamlit_option_menu
+streamlit-option-menu
 fr-core-news-sm @ https://github.com/explosion/spacy-models/releases/download/fr_core_news_sm-3.0.0/fr_core_news_sm-3.0.0.tar.gz
