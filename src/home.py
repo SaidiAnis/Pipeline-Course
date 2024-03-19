@@ -1,21 +1,17 @@
-import streamlit as st  
+import streamlit as st
 import cx_Oracle
 import pandas as pd
 import oracledb
-import spacy
-from spacy.lang.fr.stop_words import STOP_WORDS as fr_stop
-
-
 from pandas.api.types import (
     is_categorical_dtype,
     is_datetime64_any_dtype,
     is_numeric_dtype,
     is_object_dtype,
 )
-import pandas as pd
 import streamlit as st
 from googletrans import Translator
-from googletrans import Translator
+# Note that you've imported Translator twice, so you only need to do it once.
+
 
 def translate_to_english(word):
     translator = Translator()
@@ -236,20 +232,9 @@ def make_clickable(link):
 
 
 # Charger le modèle français
-nlp = spacy.load("fr_core_news_sm")
+#nlp = spacy.load("fr_core_news_sm")
 
-def filter_keywords_spacy(sentence):
-    if is_valid_sentence(sentence):
-        # Tokeniser la phrase avec Spacy
-        doc = nlp(sentence)
-    
-        # Filtrer les stop words et les mots non significatifs, sauf pour les exceptions
-        keywords = [token.text for token in doc if (token.text.lower() not in fr_stop and token.pos_ in ["ADJ", "NOUN", "VERB", "PROPN"])]
 
-        return ' '.join(keywords)
-    else:
-        # Retourner la phrase originale si elle ne remplit pas les critères de longueur
-        return sentence
 
 
 def is_valid_sentence(text, word_threshold=3):
@@ -264,7 +249,7 @@ def fetch_search_results(search_term):
     # translate to english always (becasue courses are in english )
     search_term = translate_to_english(search_term)
 
-    corrected_keyword=filter_keywords_spacy(search_term)
+    #corrected_keyword=filter_keywords_spacy(search_term)
 
     # Oracle database connection string - modify with your details
     dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='xe')
