@@ -90,6 +90,68 @@ def apply_custom_styles():
 # Call the function to apply custom styles
 apply_custom_styles()
 
+import streamlit as st
+import pandas as pd
+from pandas.api.types import (
+    is_categorical_dtype,
+    is_datetime64_any_dtype,
+    is_numeric_dtype,
+    is_object_dtype,
+)
+
+def filter_dataframe2(df: pd.DataFrame, filter_columns=None) -> pd.DataFrame:
+    """ 
+    Adds a UI on top of a dataframe to let viewers filter specific columns.
+
+    Args:
+        df (pd.DataFrame): Original dataframe.
+        filter_columns (list): List of columns to apply filters on. If None, filters apply to all columns.
+
+    Returns:
+        pd.DataFrame: Filtered dataframe.
+    """
+    if filter_columns is None:
+        filter_columns = df.columns.tolist()
+
+    modify = st.checkbox("Add filters")
+    if not modify:
+        return df
+
+    df = df.copy()
+
+    # Convert datetimes into a standard format (if applicable)
+    for col in filter_columns:
+        if is_object_dtype(df[col]):
+            try:
+                df[col] = pd.to_datetime(df[col])
+            except Exception:
+                pass
+        if is_datetime64_any_dtype(df[col]):
+            df[col] = df[col].dt.tz_localize(None)
+
+    modification_container = st.container()
+    with modification_container:
+        to_filter_columns = st.multiselect("Filter dataframe on", options=filter_columns, default=filter_columns)
+        for column in to_filter_columns:
+            # Apply specific filter types based on column data type
+            if is_categorical_dtype(df[column]) or df[column].nunique() < 10:
+                filter_options = st.multiselect(f"Values for {column}", df[column].unique(), default=list(df[column].unique()))
+                df = df[df[column].isin(filter_options)]
+            elif is_numeric_dtype(df[column]):
+                min_val, max_val = float(df[column].min()), float(df[column].max())
+                value_range = st.slider(f"Range for {column}", min_value=min_val, max_value=max_val, value=(min_val, max_val))
+                df = df[df[column].between(*value_range)]
+            elif is_datetime64_any_dtype(df[column]):
+                date_range = st.date_input(f"Date range for {column}", value=(df[column].min(), df[column].max()))
+                if len(date_range) == 2:
+                    df = df[df[column].between(*date_range)]
+            else:
+                text_query = st.text_input(f"Search in {column}", "")
+                if text_query:
+                    df = df[df[column].astype(str).str.contains(text_query, case=False)]
+
+    return df
+
 
 
 def filter_dataframe(df: pd.DataFrame) -> pd.DataFrame:
@@ -244,6 +306,27 @@ def fetch_search_results(search_term):
 
     # Continue with your DataFrame operations
 
+    def lob_to_str(val):
+        if isinstance(val, cx_Oracle.LOB):
+            return val.read()
+        return val
+
+    # Apply the conversion to all columns that may contain LOB objects
+    for col in subset_df.columns:
+        subset_df[col] = subset_df[col].apply(lob_to_str)
+
+    # After converting LOB to string, ensure other data types are appropriately set
+    # Converting specified columns to float
+    subset_df['Nombre_avis'] = subset_df['Nombre_avis'].astype(float)
+    subset_df['Duree'] = subset_df['Duree'].str.extract('(\d+\.?\d*)').astype(float)
+    subset_df['Nombre_participants'] = subset_df['Nombre_participants'].astype(float)
+
+    # Convert all other applicable columns to categorical
+    columns_to_exclude = ['Nombre_avis', 'Duree', 'Nombre_participants']
+    columns_to_convert = [col for col in subset_df.columns if col not in columns_to_exclude]
+
+    for col in columns_to_convert:
+        subset_df[col] = subset_df[col].astype('category')
 
 
     return subset_df
@@ -333,7 +416,8 @@ def app() :   # Custom colors and fonts
 
         if not st.session_state.search_results.empty:
             # Apply the filter_dataframe function to the stored search results
-            filtered_df = filter_dataframe(st.session_state.search_results)
+            filtered_df = filter_dataframe2(st.session_state.search_results,filter_columns=['Nombre_avis', 'Duree', 'Nombre_participants', 'Niveau', 'Organisation'])
+            
             display_dataframe_in_pages(filtered_df, page_size=10)  # Example: Set page size to 10 rows
 
 
@@ -343,16 +427,7 @@ def app() :   # Custom colors and fonts
             # Display the (filtered) DataFramef
             # Convert "NOMBRE_AVIS" and "DUREE" columns to float
             #filtered_df["NOMBRE_AVIS"] = filtered_df["NOMBRE_AVIS"].astype(float)
-            filtered_df["Duree"] = filtered_df["Duree"].astype("str")
-            
-
-            print(filtered_df.columns)
-
-            # Convert the other columns to categorical
-            categorical_columns = ["Notes", "Nombre_avis", "Duree", "Nombre_participants", "Niveau", "Organisation","prix", "Score"]
-
-            filtered_df[categorical_columns] = filtered_df[categorical_columns].astype("str")
-
+           
             #print(filtered_df.dtypes)
             #st.dataframe(filtered_df)
 
