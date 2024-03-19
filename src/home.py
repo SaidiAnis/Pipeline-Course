@@ -199,6 +199,7 @@ oracledb.defaults.fetch_lobs = False
 
 
 def fetch_search_results(search_term):
+    # translate to english always (becasue courses are in english )
     search_term = translate_to_english(search_term)
 
     corrected_keyword=filter_keywords_spacy(search_term)
