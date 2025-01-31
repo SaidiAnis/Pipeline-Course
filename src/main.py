@@ -1,4 +1,8 @@
 import streamlit as st
+
+# Setting the page configuration with a custom title
+st.set_page_config(page_title="Digital Courses")
+
 from streamlit_option_menu import option_menu
 
 # Importing the modules representing different sections of your app
@@ -11,8 +15,7 @@ import warnings
 warnings.simplefilter("ignore", UserWarning)
 
 
-# Setting the page configuration with a custom title
-st.set_page_config(page_title="Digital Courses")
+
 
 class MultiApp:
     """A class to represent a Streamlit multi-app.
