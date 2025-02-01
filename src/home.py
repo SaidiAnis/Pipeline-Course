@@ -1,5 +1,5 @@
 import streamlit as st
-import cx_Oracle
+import oracledb
 import pandas as pd
 import oracledb
 import os
@@ -16,7 +16,7 @@ from googletrans import Translator
 ORACLE_CLIENT_PATH = os.path.join(os.getcwd(), "instantclient")
 
 # Initialize the Oracle Client
-cx_Oracle.init_oracle_client(lib_dir=ORACLE_CLIENT_PATH)
+oracledb.init_oracle_client(lib_dir=ORACLE_CLIENT_PATH)
 
 
 def translate_to_english(word):
@@ -258,13 +258,13 @@ def fetch_search_results(search_term):
     #corrected_keyword=filter_keywords_spacy(search_term)
 
     # Oracle database connection string - modify with your details
-    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='xe')
-    connection = cx_Oracle.connect(user='sys', password='Zbelzbel123&',mode=cx_Oracle.SYSDBA, dsn=dsn_tns)
+    dsn_tns = oracledb.makedsn('localhost', '1521', service_name='xe')
+    connection = oracledb.connect(user='sys', password='Zbelzbel123&',mode=oracledb.SYSDBA, dsn=dsn_tns)
 
    
     # Create a cursor
     cursor = connection.cursor()
-    result_cursor = cursor.callfunc('trouver_lignes_avec_mots_similaires', cx_Oracle.CURSOR, [search_term])
+    result_cursor = cursor.callfunc('trouver_lignes_avec_mots_similaires', oracledb.CURSOR, [search_term])
     result_list = result_cursor.fetchall()
     df = pd.DataFrame(result_list, columns=["RefSOUSSOUSDomaineF", "RefSOUSDomaineF", "Le_nom", "Descriptio", "Notes", "Nombre_avis", "Duree", "Nombre_participants", "Niveau", "Liens", "Destinataires", "Formateurs", "Chapitre", "Competences_gagnees", "Organisation", "MotsCles", "prix", "Score"])
 
@@ -298,7 +298,7 @@ def fetch_search_results(search_term):
     # Continue with your DataFrame operations
 
     def lob_to_str(val):
-        if isinstance(val, cx_Oracle.LOB):
+        if isinstance(val, oracledb.LOB):
             return val.read()
         return val
 
@@ -326,12 +326,12 @@ def fetch_search_results(search_term):
 def get_database_connection():
     # Replace with your Oracle Database connection details
 
-    dsn_tns = cx_Oracle.makedsn('localhost', '1521', service_name='xe')
+    dsn_tns = oracledb.makedsn('localhost', '1521', service_name='xe')
 
     try:
-        connection = cx_Oracle.connect(user='sys', password='projet_bda',mode=cx_Oracle.SYSDBA, dsn=dsn_tns)
+        connection = oracledb.connect(user='sys', password='projet_bda',mode=oracledb.SYSDBA, dsn=dsn_tns)
         return connection
-    except cx_Oracle.DatabaseError as e:
+    except oracledb.DatabaseError as e:
         st.error(f"Error connecting to the database: {e}")
         return None
 
