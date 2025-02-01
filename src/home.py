@@ -2,6 +2,7 @@ import streamlit as st
 import cx_Oracle
 import pandas as pd
 import oracledb
+import os
 from pandas.api.types import (
     is_categorical_dtype,
     is_datetime64_any_dtype,
@@ -11,6 +12,11 @@ from pandas.api.types import (
 import streamlit as st
 from googletrans import Translator
 # Note that you've imported Translator twice, so you only need to do it once.
+
+ORACLE_CLIENT_PATH = os.path.join(os.getcwd(), "instantclient")
+
+# Initialize the Oracle Client
+cx_Oracle.init_oracle_client(lib_dir=ORACLE_CLIENT_PATH)
 
 
 def translate_to_english(word):
