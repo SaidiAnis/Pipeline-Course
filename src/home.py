@@ -13,10 +13,10 @@ import streamlit as st
 from googletrans import Translator
 # Note that you've imported Translator twice, so you only need to do it once.
 
-ORACLE_CLIENT_PATH = os.path.join(os.getcwd(), "instantclient")
+#ORACLE_CLIENT_PATH = os.path.join(os.getcwd(), "instantclient")
 
 # Initialize the Oracle Client
-oracledb.init_oracle_client(lib_dir=ORACLE_CLIENT_PATH)
+#oracledb.init_oracle_client(lib_dir=ORACLE_CLIENT_PATH)
 
 
 def translate_to_english(word):
