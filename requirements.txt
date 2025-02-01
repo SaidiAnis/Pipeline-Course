@@ -1,5 +1,5 @@
 streamlit
-oracledb>=1.6.0
+cx_Oracle
 pandas
 oracledb
 #spacy
