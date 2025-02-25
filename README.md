@@ -58,14 +58,7 @@ Once the database is set up, start the application with:
 ```bash
 streamlit run main.py
 ```
-
-### 📸 Architecture Diagram
-Make sure to include this image in your repository:
-![Project Architecture](image.png)
-
 ---
 
 ## 📌 Conclusion
 EduCompare provides an automated pipeline for aggregating, cleaning, storing, and searching online courses. Its **advanced search function** enables users to quickly find relevant training programs, improving accessibility and course selection.
-
-🔗 **GitHub Repository**: [Your Project Link Here]
