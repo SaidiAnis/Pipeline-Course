@@ -4,6 +4,8 @@
 
 EduCompare consolidates and simplifies access to online educational resources by aggregating courses from platforms such as **Coursera, Udemy, and Cegos**. This enables users to **compare and select** the most relevant courses efficiently.
 
+![Project diagram](Projet_Picture/On_premise.png)
+
 ### Key Features:
 1. **Aggregating educational resources** from Coursera, Udemy, and Cegos.
 2. **Database modeling** to structure and store data efficiently.
